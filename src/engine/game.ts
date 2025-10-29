@@ -351,6 +351,9 @@ export class Game {
 
   /**
    * Get all available actions for the current player
+   * 
+   * Note: During robberDiscard phase, use getPlayersWhoMustDiscard() instead
+   * as this phase doesn't follow traditional turn order
    */
   getAvailableActions(): string[] {
     const actions: string[] = [];
@@ -395,6 +398,35 @@ export class Game {
     }
 
     return actions;
+  }
+
+  /**
+   * Get list of player IDs who must discard resources
+   * 
+   * This is used during robberDiscard phase, which doesn't follow traditional turn order.
+   * All players in this list must discard before the game can proceed to robberPlacement.
+   */
+  getPlayersWhoMustDiscard(): string[] {
+    return [...this._state.turn.mustDiscardPlayers];
+  }
+
+  /**
+   * Check if a specific player needs to take action in the current phase
+   * 
+   * This is useful for AI bots to determine if they should act or wait
+   */
+  doesPlayerNeedToAct(playerId: string): boolean {
+    const phase = this._state.turn.phase;
+    
+    if (phase === 'robberDiscard') {
+      return this._state.turn.mustDiscardPlayers.includes(playerId);
+    }
+    
+    if (phase === 'robberPlacement') {
+      return this.getCurrentPlayer().id === playerId;
+    }
+    
+    return this.getCurrentPlayer().id === playerId;
   }
 
   // ============================================================================

@@ -30,24 +30,42 @@ export function completeSetup(game: Game): void {
 }
 
 export function handleRobber(game: Game): void {
-  const state = game.getState();
+  let state = game.getState();
   
   if (state.turn.phase === 'robberDiscard') {
-    state.turn.mustDiscardPlayers.forEach(playerId => {
+    const playersToDiscard = [...game.getPlayersWhoMustDiscard()];
+    
+    for (const playerId of playersToDiscard) {
+      state = game.getState();
       const player = state.players.find(p => p.id === playerId);
-      if (!player) return;
+      if (!player) continue;
       
       const total = Object.values(player.resources).reduce((a, b) => a + b, 0);
       const toDiscard = Math.floor(total / 2);
       
-      if (toDiscard > 0 && player.resources.wood >= toDiscard) {
-        game.discardResources(playerId, { wood: toDiscard });
+      if (toDiscard > 0) {
+        const resources: Record<string, number> = {};
+        let remaining = toDiscard;
+        
+        for (const resourceType of ['wood', 'brick', 'sheep', 'wheat', 'ore'] as const) {
+          const available = player.resources[resourceType];
+          if (available > 0 && remaining > 0) {
+            const amount = Math.min(available, remaining);
+            resources[resourceType] = amount;
+            remaining -= amount;
+          }
+        }
+        
+        if (Object.keys(resources).length > 0) {
+          game.discardResources(playerId, resources);
+        }
       }
-    });
+    }
   }
   
-  if (game.getState().turn.phase === 'robberPlacement') {
-    const tiles = Array.from(game.getState().board.tiles.values()).filter(t => !t.hasRobber);
+  state = game.getState();
+  if (state.turn.phase === 'robberPlacement') {
+    const tiles = Array.from(state.board.tiles.values()).filter(t => !t.hasRobber);
     if (tiles.length > 0) {
       game.moveRobber(tiles[0].id);
     }

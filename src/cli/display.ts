@@ -167,6 +167,14 @@ export function displayTurnInfo(state: GameState): void {
     console.log(`Setup Phase: ${state.turn.setupPhase} (Round ${state.turn.setupRound})`);
   }
 
+  if (state.turn.phase === 'robberDiscard') {
+    const playersToDiscard = state.turn.mustDiscardPlayers
+      .map(id => state.players.find(p => p.id === id)?.name)
+      .filter(Boolean)
+      .join(', ');
+    console.log(chalk.red(`⚠️  Players must discard: ${playersToDiscard}`));
+  }
+
   console.log();
 }
 

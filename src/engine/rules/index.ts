@@ -20,6 +20,14 @@ export function canEndTurn(state: GameState, playerId: string): ValidationResult
     return { valid: false, error: 'Cannot manually end turn during setup' };
   }
 
+  if (state.turn.phase === 'robberDiscard') {
+    return { valid: false, error: 'Cannot end turn during robber discard phase' };
+  }
+
+  if (state.turn.phase === 'robberPlacement') {
+    return { valid: false, error: 'Cannot end turn during robber placement phase' };
+  }
+
   if (!state.turn.hasRolled) {
     return { valid: false, error: 'Must roll dice before ending turn' };
   }

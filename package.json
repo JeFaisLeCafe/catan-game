@@ -42,11 +42,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/catan-game-engine"
+    "url": "https://github.com/JeFaisLeCafe/catan-game"
   },
-  "homepage": "https://github.com/yourusername/catan-game-engine#readme",
+  "homepage": "https://github.com/JeFaisLeCafe/catan-game-engine#readme",
   "bugs": {
-    "url": "https://github.com/yourusername/catan-game-engine/issues"
+    "url": "https://github.com/JeFaisLeCafe/catan-game-engine/issues"
   },
   "files": [
     "dist",

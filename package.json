@@ -1,6 +1,6 @@
 {
   "name": "catan-game-engine",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A complete TypeScript implementation of Settlers of Catan game logic",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
